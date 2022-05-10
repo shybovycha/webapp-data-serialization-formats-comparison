@@ -1,0 +1,37 @@
+{
+  "name": "webapp-payload-binary-protocols",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build-test5-avro": "esbuild test5/test5-avro.js --bundle --outfile=test5/test5-avro.bundle.js --target=\"chrome100,firefox99\" --define:process.env={} --inject:test5/buffer-shim.js --minify",
+    "build-test5-bson": "esbuild test5/test5-bson.js --bundle --outfile=test5/test5-bson.bundle.js --target=\"chrome100,firefox99\" --minify",
+    "build-test5-cbor": "esbuild test5/test5-cbor.js --bundle --outfile=test5/test5-cbor.bundle.js --target=\"chrome100,firefox99\" --minify",
+    "build-test5-messagepack": "esbuild test5/test5-messagepack.js --bundle --outfile=test5/test5-messagepack.bundle.js --target=\"chrome100,firefox99\" --minify",
+    "build-test5-protobuf": "esbuild test5/test5-protobuf.js --bundle --outfile=test5/test5-protobuf.bundle.js --target=\"chrome100,firefox99\" --minify",
+    "build-test5-protobuf-compiled": "yarn pbjs -t static-module -w commonjs -o test5/test5-protobuf-compiled-proto.js test5/test5.proto && esbuild test5/test5-protobuf-compiled.js --bundle --outfile=test5/test5-protobuf-compiled.bundle.js --target=\"chrome100,firefox99\" --minify",
+    "build-test5-flatbuffers": "flatc -o test5/test5-flatbuffers-compiled-proto/ --ts test5/test5.fbs",
+    "build-test5-flatbuffers-compiled": "yarn tsc ./test5/test5-flatbuffers-compiled-proto/testpackage/timeframe-data.ts --target es6 --moduleResolution node",
+    "build-test5-unified": "esbuild test5/index.js --bundle --outfile=test5/index.bundle.js --target=\"chrome100,firefox99\" --define:process.env={} --inject:test5/buffer-shim.js",
+    "build-test5": "yarn build-test5-avro && yarn build-test5-bson && yarn build-test5-cbor && yarn build-test5-messagepack && yarn build-test5-protobuf && yarn build-test5-protobuf-compiled && yarn build-test5-flatbuffers-compiled && yarn build-test5-unified"
+  },
+  "dependencies": {
+    "@protobufjs/base64": "^1.1.2",
+    "@protobufjs/utf8": "^1.1.0",
+    "avsc": "^5.7.4",
+    "bson": "^4.6.3",
+    "buffer": "^6.0.3",
+    "cbor-x": "^1.2.1",
+    "esbuild": "^0.14.38",
+    "events": "^3.3.0",
+    "flatbuffers": "^2.0.6",
+    "long": "^5.2.0",
+    "msgpackr": "^1.5.7",
+    "path": "^0.12.7",
+    "protobufjs": "^6.11.2",
+    "stream": "^0.0.2",
+    "thriftrw": "^3.12.0",
+    "typescript": "^4.6.4",
+    "util": "^0.12.4"
+  }
+}
