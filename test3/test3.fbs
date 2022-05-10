@@ -1,0 +1,7 @@
+namespace testpackage;
+
+table IntIdsResource {
+    ids: [int32];
+}
+
+root_type IntIdsResource;

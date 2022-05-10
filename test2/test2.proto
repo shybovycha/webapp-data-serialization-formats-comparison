@@ -1,0 +1,6 @@
+package testpackage;
+syntax = "proto3";
+
+message StringIdsResource {
+    repeated string ids = 1;
+}

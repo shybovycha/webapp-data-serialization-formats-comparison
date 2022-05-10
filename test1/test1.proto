@@ -1,0 +1,12 @@
+package testpackage;
+syntax = "proto3";
+
+message Pet {
+    enum PetKind {
+        CAT = 1;
+        DOG = 2;
+    }
+
+    PetKind kind = 1;
+    string name = 2;
+}

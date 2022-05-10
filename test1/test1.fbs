@@ -1,0 +1,13 @@
+namespace testpackage;
+
+enum PetKind:byte {
+    CAT = 0,
+    DOG = 1
+}
+
+table Pet {
+    kind: PetKind;
+    name: string;
+}
+
+root_type Pet;

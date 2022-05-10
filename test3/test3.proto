@@ -1,0 +1,6 @@
+package testpackage;
+syntax = "proto3";
+
+message IntIdsResource {
+    repeated int32 ids = 1;
+}

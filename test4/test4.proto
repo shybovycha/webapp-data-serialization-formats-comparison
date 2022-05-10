@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package testpackage;
+
+message TimeframeValues {
+    double category1 = 1;
+    double category2 = 2;
+    double category3 = 3;
+}
+
+message Timeframe {
+    int64 timestamp = 1;
+    TimeframeValues values = 2;
+}
+
+message TimeframeData {
+    repeated Timeframe dataPoints = 1;
+}

@@ -1,0 +1,7 @@
+namespace testpackage;
+
+table StringIdsResource {
+    ids: [string];
+}
+
+root_type StringIdsResource;
