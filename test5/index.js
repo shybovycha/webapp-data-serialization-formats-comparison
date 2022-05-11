@@ -159,7 +159,28 @@ const Serializers = [
         decode: (data) => {
             const buf = new flatbuffers.ByteBuffer(data);
 
-            return FlatbuffersTimeframeData.TimeframeData.getRootAsTimeframeData(buf);
+            const timeframeData = FlatbuffersTimeframeData.TimeframeData.getRootAsTimeframeData(buf);
+
+            const dataPoints = [...Array(timeframeData.dataPointsLength())].map((_, idx) => {
+                const dataPoint = timeframeData.dataPoints(idx);
+
+                const timestamp = dataPoint.timestamp();
+
+                const category1 = dataPoint.values().category1();
+                const category2 = dataPoint.values().category2();
+                const category3 = dataPoint.values().category3();
+
+                return {
+                    timestamp,
+                    values: {
+                        category1,
+                        category2,
+                        category3,
+                    },
+                };
+            });
+
+            return { dataPoints };
         },
     },
 ];
@@ -178,8 +199,8 @@ Serializers.forEach(({ name, encode, decode }) => {
             <td>${name}</td>
             <td>${encodingDuration}ms</td>
             <td>${decodingDuration}ms</td>
-            <td>${JSON.stringify(data).length}</td>
             <td>${buf.length}</td>
+            <td>${((1 - (buf.length / JSON.stringify(data).length)) * 100.0).toFixed(2)}%</td>
             <td>${base64.encode(buf, 0, buf.length).length}</td>
         </tr>`;
 });
