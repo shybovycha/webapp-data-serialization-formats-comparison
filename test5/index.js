@@ -4,6 +4,7 @@ const CBOR = require('cbor-x');
 const MessagePack = require('msgpackr');
 const protobufFull = require('protobufjs');
 const flatbuffers = require('flatbuffers');
+const thrift = require('thrift');
 
 const base64 = require('@protobufjs/base64');
 // const utf8 = require('@protobufjs/utf8');
@@ -100,6 +101,8 @@ const FlatbuffersTimeframeData = require('./test5-flatbuffers-compiled-proto/tes
 const FlatbuffersTimeframe = require('./test5-flatbuffers-compiled-proto/testpackage/timeframe');
 const FlatbuffersTimeframeValues = require('./test5-flatbuffers-compiled-proto/testpackage/timeframe-values');
 
+const ThriftType = require('./test5-thrift-compiled-proto');
+
 const data = {
     dataPoints: [...Array(1000)].map((_, idx) => ({
         timestamp: new Date().getTime(),
@@ -181,6 +184,43 @@ const Serializers = [
             });
 
             return { dataPoints };
+        },
+    },
+    {
+        name: 'Thrift',
+        encode: (data) => {
+            let thriftBuffer = null;
+
+            const thriftTransport = new thrift.TBufferedTransport(null, res => thriftBuffer = res);
+            // const binaryThriftProtocol = new thrift.TBinaryProtocol(thriftTransport);
+            const binaryThriftProtocol = new thrift.TCompactProtocol(thriftTransport);
+
+            const dataPoints = data.dataPoints.map(dp => {
+                const vs = new ThriftType.TimeframeValues(dp.values);
+
+                return new ThriftType.Timeframe({ timestamp: dp.timestamp, values: vs });
+            });
+
+            const obj = new ThriftType.TimeframeData({ dataPoints });
+
+            obj.write(binaryThriftProtocol);
+
+            binaryThriftProtocol.flush();
+
+            return thriftBuffer;
+        },
+        decode: (data) => {
+            let obj = null;
+
+            const tr = thrift.TBufferedTransport.receiver(transport => {
+                const protocol = new thrift.TCompactProtocol(transport);
+
+                obj = ThriftType.TimeframeData.read(protocol);
+            });
+
+            tr(Buffer.from(data));
+
+            return obj;
         },
     },
 ];
