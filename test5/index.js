@@ -187,7 +187,43 @@ const Serializers = [
         },
     },
     {
-        name: 'Thrift',
+        name: 'Thrift (binary)',
+        encode: (data) => {
+            let thriftBuffer = null;
+
+            const thriftTransport = new thrift.TBufferedTransport(null, res => thriftBuffer = res);
+            const binaryThriftProtocol = new thrift.TBinaryProtocol(thriftTransport);
+
+            const dataPoints = data.dataPoints.map(dp => {
+                const vs = new ThriftType.TimeframeValues(dp.values);
+
+                return new ThriftType.Timeframe({ timestamp: dp.timestamp, values: vs });
+            });
+
+            const obj = new ThriftType.TimeframeData({ dataPoints });
+
+            obj.write(binaryThriftProtocol);
+
+            binaryThriftProtocol.flush();
+
+            return thriftBuffer;
+        },
+        decode: (data) => {
+            let obj = null;
+
+            const tr = thrift.TBufferedTransport.receiver(transport => {
+                const protocol = new thrift.TBinaryProtocol(transport);
+
+                obj = ThriftType.TimeframeData.read(protocol);
+            });
+
+            tr(Buffer.from(data));
+
+            return obj;
+        },
+    },
+    {
+        name: 'Thrift (compact)',
         encode: (data) => {
             let thriftBuffer = null;
 
