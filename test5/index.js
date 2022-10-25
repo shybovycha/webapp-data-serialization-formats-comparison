@@ -127,6 +127,7 @@ const benchmark = (fn) => {
 };
 
 const Serializers = [
+    { name: 'JSON', encode: (data) => JSON.stringify(data), decode: (data) => JSON.parse(data) },
     { name: 'Avro', encode: (data) => AvroType.toBuffer(data), decode: (data) => AvroType.fromBuffer(data) },
     { name: 'BSON', encode: (data) => BSON.serialize(data), decode: (data) => BSON.deserialize(data) },
     { name: 'CBOR', encode: (data) => CBOR.encode(data), decode: (data) => CBOR.decode(data) },
