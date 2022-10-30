@@ -13,7 +13,7 @@
     "build-test5-flatbuffers": "flatc -o test5/test5-flatbuffers-compiled-proto/ --ts test5/test5.fbs",
     "build-test5-flatbuffers-compiled": "yarn tsc ./test5/test5-flatbuffers-compiled-proto/testpackage/timeframe-data.ts --target es6 --moduleResolution node",
     "build-test5-thrift": "yarn thrift-typescript --outDir ./test5/test5-thrift-compiled-proto --rootDir . --sourceDir . test5/test5.thrift",
-    "build-test5-thrift-compiled": "yarn tsc ./test5/test5-thrift-compiled-proto/index.ts --target es6 --moduleResolution node && yarn esbuild test5/test5-thrift.js --bundle --outfile=test5/test5-thrift.bundle.js --target=\"chrome100,firefox99\" --minify",
+    "build-test5-thrift-compiled": "yarn tsc ./test5/test5-thrift-compiled-proto/index.ts --target es6 --moduleResolution node && yarn esbuild test5/test5-thrift-binary.js --bundle --outfile=test5/test5-thrift.bundle.js --target=\"chrome100,firefox99\" --minify",
     "build-test5-unified": "esbuild test5/index.js --bundle --outfile=test5/index.bundle.js --target=\"chrome100,firefox99\" --define:process.env={} --inject:test5/buffer-shim.js",
     "build-test5": "yarn build-test5-avro && yarn build-test5-bson && yarn build-test5-cbor && yarn build-test5-messagepack && yarn build-test5-protobuf && yarn build-test5-protobuf-compiled && yarn build-test5-flatbuffers-compiled && yarn build-test5-thrift && yarn build-test5-thrift-compiled && yarn build-test5-unified"
   },
